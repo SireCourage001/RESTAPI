@@ -4,92 +4,85 @@ const PORT = 3000;
 
 app.use(express.json());
 
-// In-memory data store
-let items = [];
-let nextId = 1;
+// Import users
+let users = require('./data/users');
 
-// Root route
+// Root
 app.get('/', (req, res) => {
   res.send('Hello, World!');
 });
 
-// Get all items
-app.get('/items', (req, res) => {
-  res.json(items);
+// GET all users
+app.get('/users', (req, res) => {
+  res.json(users);
 });
 
-// Get a single item by ID
-app.get('/items/:id', (req, res) => {
+// GET user by ID
+app.get('/users/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const item = items.find(i => i.id === id);
+  const user = users.find(u => u.id === id);
 
-  if (!item) {
-    return res.status(404).json({ error: 'Item not found' });
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
 
-  res.json(item);
+  res.json(user);
 });
 
-// Create a new item
-app.post('/items', (req, res) => {
-  const { name, description } = req.body;
+// POST new user
+app.post('/users', (req, res) => {
+  const { name, email } = req.body;
 
-  if (!name || !description) {
-    return res.status(400).json({ error: 'Name and description are required' });
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  const newItem = {
-    id: nextId++,
+  const newUser = {
+    id: users.length + 1,
     name,
-    description
+    email
   };
 
-  items.push(newItem);
-  res.status(201).json(newItem);
+  users.push(newUser);
+  res.status(201).json(newUser);
 });
 
-// Update an item by ID
-app.put('/items/:id', (req, res) => {
+// PUT update user
+app.put('/users/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const { name, description } = req.body;
+  const { name, email } = req.body;
 
-  const item = items.find(i => i.id === id);
-  if (!item) {
-    return res.status(404).json({ error: 'Item not found' });
+  const user = users.find(u => u.id === id);
+  if (!user) {
+    return res.status(404).json({ error: 'User not found' });
   }
 
-  if (!name || !description) {
-    return res.status(400).json({ error: 'Name and description are required' });
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required' });
   }
 
-  item.name = name;
-  item.description = description;
+  user.name = name;
+  user.email = email;
 
-  res.json(item);
+  res.json(user);
 });
 
-// Delete an item by ID
-app.delete('/items/:id', (req, res) => {
+// DELETE user
+app.delete('/users/:id', (req, res) => {
   const id = parseInt(req.params.id);
-  const index = items.findIndex(i => i.id === id);
+  const index = users.findIndex(u => u.id === id);
 
   if (index === -1) {
-    return res.status(404).json({ error: 'Item not found' });
+    return res.status(404).json({ error: 'User not found' });
   }
 
-  items.splice(index, 1);
-  res.json({ message: 'Item deleted successfully' });
+  users.splice(index, 1);
+  res.json({ message: 'User deleted successfully' });
 });
 
-// Handle invalid routes
+// 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Route not found' });
-});
-
-// Global error handler (optional for 500)
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Something went wrong!' });
 });
 
 app.listen(PORT, () => {
