@@ -24,8 +24,17 @@ Make sure you have **Node.js** installed.
 
 1. Clone the repository or download the source code: https://github.com/SireCourage001/RESTAPI.git
 2. Navigate to the project directory:
-   ```bash
-   cd expressAPI
+
+cd expressAPI
 
 npm init -y
 npm install
+
+npm install express
+
+
+👨‍💻 Author
+Courage Ekpo
+
+Email: sirecourage@gmail.com
+
