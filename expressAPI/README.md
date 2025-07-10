@@ -19,6 +19,7 @@ This project is a simple RESTful API built with Node.js and Express.js. It demon
 ### Prerequisites
 
 Make sure you have **Node.js** installed.
+Also, install Thunder-client for testing API
 
 ### 📥 Installation
 
